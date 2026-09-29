@@ -61,26 +61,40 @@
 
   <script>
     const SUPABASE_URL = "https://fnjhcvobdxhgncgxunqe.supabase.co";
+  const SUPABASE_ANON_KEY = "YOUR_EXISTING_KEY_HERE";
 
-    const SUPABASE_ANON_KEY = "sb_publishable_BPJoEWKPaTZ2QS_XlllIIA_y8gA4mgv";
+  const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
 
-    const supabaseClient = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_ANON_KEY
-    );
+  async function signInWithGoogle() {
 
-    async function signInWithGoogle() {
-      const { error } = await supabaseClient.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: "https://harifacility-cloud.github.io/gei-key-management/"
-        }
-      });
+    document.getElementById("status").innerHTML =
+      "Connecting to Google...";
+
+    try {
+
+      const { data, error } =
+        await supabaseClient.auth.signInWithOAuth({
+          provider: "google",
+          options: {
+            redirectTo:
+              "https://harifacility-cloud.github.io/gei-key-management/"
+          }
+        });
 
       if (error) {
-        alert("Login error: " + error.message);
+        document.getElementById("status").innerHTML =
+          "Login error:<br><br>" + error.message;
       }
+
+    } catch (err) {
+
+      document.getElementById("status").innerHTML =
+        "System error:<br><br>" + err.message;
     }
+  }
   </script>
 
 </body>
